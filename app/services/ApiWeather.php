@@ -8,9 +8,7 @@ class ApiWeather {
 
     public function getWeatherData(){
 
-        $response = Http::get('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,
-        relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,cloud_cover,
-        wind_speed_10m,wind_direction_10m,wind_gusts_10m&models=icon_seamless');
+        $response = Http::get('https://www.meteosource.com/api/v1/free/point?place_id=Zwolle&sections=current%2Chourly&language=en&units=auto&key=07izgkr6ndizt3pwguwam9lfn26ksul7w3xx2gel');
 
         return $response->json();
     }

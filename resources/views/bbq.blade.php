@@ -7,7 +7,7 @@
     <title>bbq</title>
 </head>
 <body>
-    <h1>{{$weatherData2}}</h1>
+    <p>{{$weatherData2}}</p>
 
 
 </body>
