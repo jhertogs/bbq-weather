@@ -4,7 +4,7 @@ use App\Http\Controllers\ApiWeatherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages/welcome');
 });
 
 

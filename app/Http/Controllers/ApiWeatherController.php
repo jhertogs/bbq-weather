@@ -18,14 +18,20 @@ class ApiWeatherController extends Controller
     public function checkBBQWeather(){
 
         $weatherData = $this->apiWeather->getWeatherData();
-        $isBbqWeather = "unset";
 
-        if($weatherData['current']['temperature'] > 15 && $weatherData['current']['precipitation']['total'] == 0 && $weatherData['current']['wind']['speed'] < 6 ){
-            $isBbqWeather = "yes";
+        $temperature = $weatherData['current']['temperature'];
+        $precipitation = $weatherData['current']['precipitation']['total'];
+        $windSpeed =  $weatherData['current']['wind']['speed'];
+        $cloudCover = $weatherData['current']['cloud_cover'];
+
+        if($temperature > 15 && $precipitation == 0 && $windSpeed < 15){
+            if($cloudCover < 50){
+                $isBbqWeather = "perfect day for a bbq";
+            }
+            $isBbqWeather = "good bbq day but cloudy";
         }else {
-        $isBbqWeather = "no";}
-
-
-        return view('bbq', ['test' => $weatherData, 'isBbqWeather' => $isBbqWeather]);
+            $isBbqWeather = "it is a bad day for a bbq";
+        }
+        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather]);
     }
 }
