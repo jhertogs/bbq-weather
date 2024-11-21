@@ -8,15 +8,13 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
     <div class="min-h-screen flex flex-col">
-        <!-- Include Navbar -->
+        
         @include('components.navbar')
 
-        <!-- Main Content -->
         <main class="flex-grow">
             @yield('content')
         </main>
 
-        <!-- Include Footer -->
         @include('components.footer')
     </div>
 </body>
