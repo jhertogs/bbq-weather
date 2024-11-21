@@ -27,11 +27,17 @@ class ApiWeatherController extends Controller
         if($temperature > 15 && $precipitation == 0 && $windSpeed < 15){
             if($cloudCover < 50){
                 $isBbqWeather = "perfect day for a bbq";
+                $msgColor = "green";
+                $msgIndicator = "😀";
             }
             $isBbqWeather = "good bbq day but cloudy";
+            $msgColor = "blue";
+            $msgIndicator = "🙂";
         }else {
             $isBbqWeather = "it is a bad day for a bbq";
+            $msgColor = "red";
+            $msgIndicator = "☹";
         }
-        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather]);
+        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather, 'msgColor' => $msgColor, 'msgIndicator' => $msgIndicator]);
     }
 }
