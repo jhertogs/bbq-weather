@@ -7,7 +7,15 @@
     <title>bbq</title>
 </head>
 <body>
-    <p>{{$weatherData2}}</p>
+    <p> @php echo("is it bbq weather?" .$isBbqWeather);  @endphp </p>
+    <p> @php echo( "temperature: " .$test['current']['temperature']); @endphp</p>
+    <p> @php echo( "precipiation: " .$test['current']['precipitation']['total']); @endphp</p>
+    <p> @php echo("wind speed: ".  $test['current']['wind']['speed']. "m/s"); @endphp</p>
+
+
+    
+
+    
 
 
 </body>

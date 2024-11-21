@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ApiWeather;
+use Str;
 
 class ApiWeatherController extends Controller
 {
@@ -17,8 +18,14 @@ class ApiWeatherController extends Controller
     public function checkBBQWeather(){
 
         $weatherData = $this->apiWeather->getWeatherData();
-        $weatherData2 = json_encode($weatherData);
+        $isBbqWeather = "unset";
 
-        return view('bbq', ['weatherData2' => $weatherData2]);
+        if($weatherData['current']['temperature'] > 15 && $weatherData['current']['precipitation']['total'] == 0 && $weatherData['current']['wind']['speed'] < 6 ){
+            $isBbqWeather = "yes";
+        }else {
+        $isBbqWeather = "no";}
+
+
+        return view('bbq', ['test' => $weatherData, 'isBbqWeather' => $isBbqWeather]);
     }
 }
