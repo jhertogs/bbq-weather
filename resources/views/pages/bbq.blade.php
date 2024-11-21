@@ -18,7 +18,9 @@
         <p class="font-bold mb-4" > {{ "- wind speed: ". $weatherData['current']['wind']['speed']. "m/s"}}</p>
         <p class="font-bold mb-4" > {{ "- cloud cover: ". $weatherData['current']['cloud_cover']. "%" }} </p>
     </div>
-
-    
 </div>
+<div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-md mx-auto sm:max-w-xl lg:max-w-3xl flex items-center justify-center">
+    <iframe class="rounded-md" width="650" height="450" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=m/s&zoom=10&overlay=wind&product=ecmwf&level=surface&lat=52.533&lon=6.164&message=true" frameborder="0"></iframe>    
+</div>
+
 @endsection
