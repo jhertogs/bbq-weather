@@ -19,13 +19,13 @@ class ApiWeatherController extends Controller
 
         $weatherData = $this->apiWeather->getWeatherData();
 
-        $temperature = $weatherData['current']['temperature'];
-        $precipitation = $weatherData['current']['precipitation']['total'];
-        $windSpeed =  $weatherData['current']['wind']['speed'];
-        $cloudCover = $weatherData['current']['cloud_cover'];
+        $forecastedPrecip = $weatherData['daily']['data'][0]['all_day']['precipitation']['total'];
+        $forecastedTemp = $weatherData['daily']['data'][0]['all_day']['temperature'];
+        $forecastedWind = $weatherData['daily']['data'][0]['all_day']['wind']['speed'];
+        $forecastedCloudCover = $weatherData['daily']['data'][0]['all_day']['cloud_cover']['total'];
 
-        if($temperature > 15 && $precipitation == 0 && $windSpeed < 15){
-            if($cloudCover < 50){
+        if($forecastedTemp > 15 && $forecastedPrecip == 0 && $forecastedWind < 15){
+            if($forecastedCloudCover < 50){
                 $isBbqWeather = "perfect day for a bbq";
                 $msgColor = "green";
                 $msgIndicator = "😀";
@@ -39,5 +39,14 @@ class ApiWeatherController extends Controller
             $msgIndicator = "☹";
         }
         return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather, 'msgColor' => $msgColor, 'msgIndicator' => $msgIndicator]);
+    }
+
+    public function getLocation(Request $request){
+        if($request->isMethod('post')){
+            $location = $request->input('location');
+
+            return redirect()->back()->with('formData', ['location' => $location]);
+        }
+        return view('pages.bbq');
     }
 }
