@@ -30,9 +30,7 @@
                 </div>
                 <form method="POST" action="/bbq">
                     @csrf
-                    <h2 class="font-bold mb-4">Location: 
-                        @if(session('formData')) {{ session('formData')['location'] }}</p>@endif
-                    </h2> 
+                    <h2 class="font-bold mb-4">Location: @if($errors->has('location')) {{ $errors->first('location'). ' (Location is set to Zwolle)' }} @else {{$location }} @endif</h2> 
                     <input type="text" name="location" id="location">
                 </form>
             </div>

@@ -10,7 +10,8 @@ Route::get('/', function () {
 
 
 Route::get('/bbq', [ApiWeatherController::class, 'checkBBQWeather']);
-Route::post('/bbq', [ApiWeatherController::class, 'getLocation']);
+Route::post('/bbq', [ApiWeatherController::class, 'checkBBQWeather']);
+
 //Route::post('/bbq', [LocationFormController::class, 'getLocation'] ); 
 
 //Route::match(['GET', 'POST'], '/bbq', [ApiWeatherController::class, 'getLocation', 'checkBBQWeather'] );

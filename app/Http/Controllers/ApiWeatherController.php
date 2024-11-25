@@ -15,9 +15,26 @@ class ApiWeatherController extends Controller
         $this->apiWeather = $apiWeather;
     }
 
-    public function checkBBQWeather(){
+    public function checkBBQWeather(Request $request){
+        $location = '';
 
-        $weatherData = $this->apiWeather->getWeatherData();
+
+        if($request->isMethod('post')){
+
+            $location = $request->input('location');
+            $weatherData = $this->apiWeather->getWeatherData($location);
+            
+            if(isset($weatherData['error']) && $weatherData['error'] === 'invalid location!'){
+                //dd('it worke');
+                
+                return redirect()->back()->withErrors(['location' => $weatherData['error']]);
+
+            }
+
+        }else {
+            $weatherData = $this->apiWeather->getWeatherDataStandard();
+            $location = 'Zwolle';
+        }
 
         $forecastedPrecip = $weatherData['daily']['data'][0]['all_day']['precipitation']['total'];
         $forecastedTemp = $weatherData['daily']['data'][0]['all_day']['temperature'];
@@ -38,15 +55,15 @@ class ApiWeatherController extends Controller
             $msgColor = "red";
             $msgIndicator = "☹";
         }
-        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather, 'msgColor' => $msgColor, 'msgIndicator' => $msgIndicator]);
+        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather, 'msgColor' => $msgColor, 'msgIndicator' => $msgIndicator, 'location' => $location]);
     }
 
-    public function getLocation(Request $request){
-        if($request->isMethod('post')){
-            $location = $request->input('location');
-
-            return redirect()->back()->with('formData', ['location' => $location]);
-        }
-        return view('pages.bbq');
-    }
+    //public function getLocation(Request $request){
+    //    if($request->isMethod('post')){
+    //        $location = $request->input('location');
+//
+    //        return redirect()->back()->with('formData', ['location' => $location]);
+    //    }
+    //    return view('pages.bbq');
+    //}
 }
