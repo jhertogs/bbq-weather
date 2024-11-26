@@ -9,7 +9,7 @@
     <div class="flex flex-wrap justify-center gap-4">
         <div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-md sm:max-w-xl lg:max-w-3xl">
             <div class="bg-gray-300 text-grey-800 text-center text-lg sm:text-xl lg:text-2xl p-3 rounded-t-md mb-5">
-                <h1 class="text-3xl font-bold mb-4">Is it a good day for a BBQ?</h1>
+                <h1 class="text-3xl font-bold mb-4">BBQ indicator</h1>
             </div>
             
             <h2 class="text-3xl font-bold mb-4 text-{{ $msgColor }}-500"> {{ $isBbqWeather. $msgIndicator }} </h2>

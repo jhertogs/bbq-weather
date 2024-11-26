@@ -46,10 +46,12 @@ class ApiWeatherController extends Controller
                 $isBbqWeather = "perfect day for a bbq";
                 $msgColor = "green";
                 $msgIndicator = "😀";
+            }elseif($forecastedCloudCover >= 50){
+                $isBbqWeather = "good bbq day but cloudy";
+                $msgColor = "blue";
+                $msgIndicator = "🙂";
             }
-            $isBbqWeather = "good bbq day but cloudy";
-            $msgColor = "blue";
-            $msgIndicator = "🙂";
+            
         }else {
             $isBbqWeather = "it is a bad day for a bbq";
             $msgColor = "red";

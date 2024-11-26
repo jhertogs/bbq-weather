@@ -6,7 +6,7 @@
     <title>@yield('title', 'My Laravel App')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 ">
     <div class="min-h-screen flex flex-col">
         
         @include('components.navbar')
