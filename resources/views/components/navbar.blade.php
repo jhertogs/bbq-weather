@@ -4,6 +4,7 @@
         <ul class="flex space-x-4">
             <li><a href="#" class="hover:underline">About</a></li>
             <li><a href="#" class="hover:underline">Contact</a></li>
+            <li><img class="rounded" src="{{ asset('/imgs/soggy.jpg') }}" alt="soggy cat"></li>
         </ul>
     </div>
 </nav>

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DB;
 use Illuminate\Http\Request;
 use App\Services\ApiWeather;
-use Str;
+use App\Models\DataModel;
+use Illuminate\Support\Carbon;
 
 class ApiWeatherController extends Controller
 {
@@ -17,7 +19,6 @@ class ApiWeatherController extends Controller
 
     public function checkBBQWeather(Request $request){
         $location = '';
-
 
         if($request->isMethod('post')){
 
@@ -35,11 +36,25 @@ class ApiWeatherController extends Controller
             $weatherData = $this->apiWeather->getWeatherDataStandard();
             $location = 'Zwolle';
         }
-
         $forecastedPrecip = $weatherData['daily']['data'][0]['all_day']['precipitation']['total'];
         $forecastedTemp = $weatherData['daily']['data'][0]['all_day']['temperature'];
         $forecastedWind = $weatherData['daily']['data'][0]['all_day']['wind']['speed'];
         $forecastedCloudCover = $weatherData['daily']['data'][0]['all_day']['cloud_cover']['total'];
+
+        $currentPrecip = $weatherData['current']['precipitation']['total'];
+        $currentTemp = $weatherData['current']['temperature'];
+
+        $test = DataModel::latest()->first();
+        if($test){
+            $latestDate = $test['created_at'];
+            $crntDate = Carbon::now();
+
+            if($latestDate->diffInHours($crntDate) >= 1){
+                DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
+            }
+        }else{
+            DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
+        }
 
         if($forecastedTemp > 15 && $forecastedPrecip == 0 && $forecastedWind < 15){
             if($forecastedCloudCover < 50){
@@ -57,15 +72,25 @@ class ApiWeatherController extends Controller
             $msgColor = "red";
             $msgIndicator = "☹";
         }
-        return view('pages/bbq', ['weatherData' => $weatherData, 'isBbqWeather' => $isBbqWeather, 'msgColor' => $msgColor, 'msgIndicator' => $msgIndicator, 'location' => $location]);
-    }
 
-    //public function getLocation(Request $request){
-    //    if($request->isMethod('post')){
-    //        $location = $request->input('location');
-//
-    //        return redirect()->back()->with('formData', ['location' => $location]);
-    //    }
-    //    return view('pages.bbq');
-    //}
+        $tempData = DB::table('data_models')->select('temp', 'created_at')->get();
+
+        $labels = $tempData->pluck('created_at')->map(function ($date) {
+            return Carbon::parse($date)->format('H:i');
+        })->toArray();
+        
+        //dd($dates);
+        $values = $tempData->pluck('temp');
+
+
+        return view('pages/bbq', [
+            'weatherData' => $weatherData,
+            'isBbqWeather' => $isBbqWeather,
+            'msgColor' => $msgColor,
+            'msgIndicator' => $msgIndicator,
+            'location' => $location,
+            'labels' => $labels,
+            'values' => $values
+        ]);
+    }
 }
