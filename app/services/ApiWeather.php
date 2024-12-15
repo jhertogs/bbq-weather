@@ -6,9 +6,20 @@ use Illuminate\Support\Facades\Http;
 
 class ApiWeather {
 
-    public function getWeatherData(string $location){
+    protected $location;
+    public function setLocation(string $location){
 
-        $response = Http::get('https://www.meteosource.com/api/v1/free/point?place_id='. $location .'&sections=current%2C%20daily&timezone=UTC&language=en&units=metric&key=07izgkr6ndizt3pwguwam9lfn26ksul7w3xx2gel');
+        $this->location = $location;
+    
+    }
+
+    public function getWeatherData(){
+
+        if(!$this->location){
+            throw new \Exception('location not set');
+        }
+
+        $response = Http::get('https://www.meteosource.com/api/v1/free/point?place_id='. $this->location .'&sections=current%2C%20daily&timezone=UTC&language=en&units=metric&key=07izgkr6ndizt3pwguwam9lfn26ksul7w3xx2gel');
 
         if($response->getStatusCode() != 400){
             return $response->json();

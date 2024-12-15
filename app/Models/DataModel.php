@@ -9,7 +9,7 @@ class DataModel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['temp','precip'];
+    protected $fillable = ['temp','precip', 'wind'];
 
     public function ok(){
     

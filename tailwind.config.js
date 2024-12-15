@@ -19,6 +19,9 @@ export default {
     plugins: [],
 
     safelist: [
+        {
+            pattern: '/text-(green|red|blue)/'
+        },
         'text-green-500',
         'text-blue-500',
         'text-red-500',

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('temp');
             $table->string('precip');
+            $table->string('wind');
             $table->timestamps();
         });
     }

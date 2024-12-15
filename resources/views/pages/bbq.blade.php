@@ -6,7 +6,11 @@
 @section('content')
 <div class="container mx-auto p-4 flex flex-wrap gap-4">
     <div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-md sm:max-w-xl lg:max-w-3xl">
+        <input type="button" id="chartBtn" value="Switch to historical data (Zwolle)" onclick=" switchCharts()">
         <canvas id="chart"></canvas>
+        <canvas id="chart2"></canvas>
+        <canvas id="chart3"></canvas>
+
     </div>
     <div class="flex flex-wrap justify-center gap-4">
         <div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-md sm:max-w-xl lg:max-w-3xl">
@@ -39,8 +43,8 @@
             </div>
         </div>
     </div>
-
-    <div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-full sm:max-w-xl lg:max-w-3xl mt-4 mx-auto">
+    
+    <div class="bg-gray-200 text-gray-800 p-4 rounded-md shadow-md max-w-full sm:max-w-xl lg:max-w-3xl mx-auto">
         <iframe class="rounded-md w-full max-w-full" height="450" src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=°C&metricWind=m/s&zoom=10&overlay=wind&product=ecmwf&level=surface&lat=52.533&lon=6.164&message=true" frameborder="0"> </iframe>
     </div>
 

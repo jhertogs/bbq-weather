@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Services\ApiWeather;
 use App\Models\DataModel;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
+
 
 class ApiWeatherController extends Controller
 {
@@ -23,7 +25,8 @@ class ApiWeatherController extends Controller
         if($request->isMethod('post')){
 
             $location = $request->input('location');
-            $weatherData = $this->apiWeather->getWeatherData($location);
+            $this->apiWeather->setLocation($location);
+            $weatherData = $this->apiWeather->getWeatherData();
             
             if(isset($weatherData['error']) && $weatherData['error'] === 'invalid location!'){
                 //dd('it worke');
@@ -44,17 +47,45 @@ class ApiWeatherController extends Controller
         $currentPrecip = $weatherData['current']['precipitation']['total'];
         $currentTemp = $weatherData['current']['temperature'];
 
-        $test = DataModel::latest()->first();
-        if($test){
-            $latestDate = $test['created_at'];
-            $crntDate = Carbon::now();
+        
+        //Artisan::call('app:get-hourly-data');
 
-            if($latestDate->diffInHours($crntDate) >= 1){
-                DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
-            }
-        }else{
-            DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
+        //data for the graphs
+        
+        $precipDaily = [];
+        $tempDaily = [];
+        $windDaily = [];
+
+        $days = [];
+        $days2 = [];
+        $days3 = [];
+        
+        for ($i = 0; $i < 7; $i++){
+            $days[] = $weatherData['daily']['data'][$i]['day'];
+            $precipDaily[] = $weatherData['daily']['data'][$i]['all_day']['precipitation']['total'];
+        
         }
+        for ($k = 0; $k < 7; $k++){
+            $days2[] = $weatherData['daily']['data'][$k]['day'];
+            $tempDaily[] = $weatherData['daily']['data'][$k]['all_day']['temperature'];
+        }
+        for ($x = 0; $x < 7; $x++){
+            $days3[] = $weatherData['daily']['data'][$x]['day'];
+            $windDaily[] = $weatherData['daily']['data'][$x]['all_day']['wind']['speed'];
+        }
+
+        //submits data to database
+        //$test = DataModel::latest()->first();
+        //if($test){
+        //    $latestDate = $test['created_at'];
+        //    $crntDate = Carbon::now();
+//
+        //    if($latestDate->diffInHours($crntDate) >= 1){
+        //        DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
+        //    }
+        //}else{
+        //    DataModel::create(['temp' => $currentTemp, 'precip' => $currentPrecip]);
+        //}
 
         if($forecastedTemp > 15 && $forecastedPrecip == 0 && $forecastedWind < 15){
             if($forecastedCloudCover < 50){
@@ -73,14 +104,34 @@ class ApiWeatherController extends Controller
             $msgIndicator = "☹";
         }
 
-        $tempData = DB::table('data_models')->select('temp', 'created_at')->get();
 
-        $labels = $tempData->pluck('created_at')->map(function ($date) {
+        //get the data from database
+        $tempData = DB::table('data_models')->select('temp', 'created_at')->get();
+        $tempLabelsH = $tempData->pluck('created_at')->map(function ($date) {
             return Carbon::parse($date)->format('H:i');
         })->toArray();
-        
-        //dd($dates);
-        $values = $tempData->pluck('temp');
+        $tempValuesH = $tempData->pluck('temp');
+
+        $precipData = DB::table('data_models')->select('precip', 'created_at')->get();
+        $precipLabelsH = $tempData->pluck('created_at')->map(function ($date) {
+            return Carbon::parse($date)->format('H:i');
+        })->toArray();
+        $precipValuesH = $precipData->pluck('precip');
+
+        $windData = DB::table('data_models')->select('wind', 'created_at')->get();
+        $windLabelsH = $windData->pluck('created_at')->map(function($date) {
+            return Carbon::parse($date)->format('H:i');
+        })->toArray();
+        $windValuesH = $windData->pluck('wind');
+
+
+
+        $precipValues = $precipDaily;
+        $precipLabels = $days;
+        $tempValues = $tempDaily;
+        $tempLabels = $days2;
+        $windValues = $windDaily;
+        $windLabels = $days3;
 
 
         return view('pages/bbq', [
@@ -89,8 +140,18 @@ class ApiWeatherController extends Controller
             'msgColor' => $msgColor,
             'msgIndicator' => $msgIndicator,
             'location' => $location,
-            'labels' => $labels,
-            'values' => $values
+            'precipLabels' => $precipLabels,
+            'precipValues' => $precipValues,
+            'tempValues' => $tempValues,
+            'tempLabels' => $tempLabels,
+            'windLabels' => $windLabels,
+            'windValues' => $windValues,
+            'tempLabelsH' => $tempLabelsH,
+            'tempValuesH' => $tempValuesH,
+            'precipLabelsH' => $precipLabelsH,
+            'precipValuesH' => $precipValuesH,
+            'windValuesH' => $windValuesH,
+            'windLabelsH' => $windLabelsH
         ]);
     }
 }
